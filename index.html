@@ -26,38 +26,23 @@
             <h1> eco-visualisation </h1>
         </div>
 
+        <div class="container">
+            <svg width="960" height="500"> </svg>
+        </div>
+
         <script>
 
-    //     var svgContainer = d3.select("body").append("svg")
-    //                                         .attr("width",600)
-    //                                         .attr("height",200);
-       //
-    //     var circleGroup    = svgContainer.append("g")
-    //                          .attr("transform", "translate(80, 0)");
-    //     var rectangleGroup = svgContainer.append("g");
-       //
-    //    var circles = circleGroup.selectAll("circle")
-    //                               .data(circleData)
-    //                               .enter()
-    //                               .append("circle");
-       //
-    //    var circleAttributes = circles
-    //                            .attr("cx", function (d) { return d.cx; })
-    //                            .attr("cy", function (d) { return d.cy; })
-    //                            .attr("r", function (d) { return d.radius; })
-    //                            .style("fill", function (d) { return d.color; });
-       //
-    //    var rectangles = rectangleGroup.selectAll("rect")
-    //                                 .data(rectangleData)
-    //                                 .enter()
-    //                                 .append("rect");
-       //
-    //    var rectangleAttributes = rectangles
-    //                               .attr("x", function (d) { return d.rx; })
-    //                               .attr("y", function (d) { return d.ry; })
-    //                               .attr("height", function (d) { return d.height; })
-    //                               .attr("width", function (d) { return d.width; })
-    //                               .style("fill", function(d) { return d.color; });
+        //select and add bounding to svg element
+        var svg = d3.select("svg"),
+        margin = {top: 20, right: 20, bottom: 110, left: 40},
+        margin2 = {top: 430, right: 20, bottom: 30, left: 40},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom,
+        height2 = +svg.attr("height") - margin2.top - margin2.bottom;
+
+        //parse the input date format e.g. 28/07/2016 00:00
+        var parseDate = d3.timeParse("%d/%m/%Y %H:%M");
+
 
 
         </script>
