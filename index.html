@@ -3,55 +3,61 @@
 <html>
 
     <head>
+
+        <script   src="https://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"></script>
-        
+
         <title> d3 tutorial </title>
     </head>
 
     <body>
 
+        <div class="container">
+            <h1> eco-visualisation </h1>
+        </div>
+
         <script>
 
-        var circleData = [
-          { "cx": 20, "cy": 20, "radius": 20, "color" : "green" },
-          { "cx": 70, "cy": 70, "radius": 20, "color" : "purple" }];
-
-
-        var rectangleData = [
-          { "rx": 110, "ry": 110, "height": 30, "width": 30, "color" : "blue" },
-          { "rx": 160, "ry": 160, "height": 30, "width": 30, "color" : "red" }];
-
-        var svgContainer = d3.select("body").append("svg")
-                                            .attr("width",200)
-                                            .attr("height",200);
-
-        var circleGroup    = svgContainer.append("g")
-                             .attr("transform", "translate(80, 0)");
-        var rectangleGroup = svgContainer.append("g");
-
-       var circles = circleGroup.selectAll("circle")
-                                  .data(circleData)
-                                  .enter()
-                                  .append("circle");
-
-       var circleAttributes = circles
-                               .attr("cx", function (d) { return d.cx; })
-                               .attr("cy", function (d) { return d.cy; })
-                               .attr("r", function (d) { return d.radius; })
-                               .style("fill", function (d) { return d.color; });
-
-       var rectangles = rectangleGroup.selectAll("rect")
-                                    .data(rectangleData)
-                                    .enter()
-                                    .append("rect");
-
-       var rectangleAttributes = rectangles
-                                  .attr("x", function (d) { return d.rx; })
-                                  .attr("y", function (d) { return d.ry; })
-                                  .attr("height", function (d) { return d.height; })
-                                  .attr("width", function (d) { return d.width; })
-                                  .style("fill", function(d) { return d.color; });
+    //     var svgContainer = d3.select("body").append("svg")
+    //                                         .attr("width",600)
+    //                                         .attr("height",200);
+       //
+    //     var circleGroup    = svgContainer.append("g")
+    //                          .attr("transform", "translate(80, 0)");
+    //     var rectangleGroup = svgContainer.append("g");
+       //
+    //    var circles = circleGroup.selectAll("circle")
+    //                               .data(circleData)
+    //                               .enter()
+    //                               .append("circle");
+       //
+    //    var circleAttributes = circles
+    //                            .attr("cx", function (d) { return d.cx; })
+    //                            .attr("cy", function (d) { return d.cy; })
+    //                            .attr("r", function (d) { return d.radius; })
+    //                            .style("fill", function (d) { return d.color; });
+       //
+    //    var rectangles = rectangleGroup.selectAll("rect")
+    //                                 .data(rectangleData)
+    //                                 .enter()
+    //                                 .append("rect");
+       //
+    //    var rectangleAttributes = rectangles
+    //                               .attr("x", function (d) { return d.rx; })
+    //                               .attr("y", function (d) { return d.ry; })
+    //                               .attr("height", function (d) { return d.height; })
+    //                               .attr("width", function (d) { return d.width; })
+    //                               .style("fill", function(d) { return d.color; });
 
 
         </script>
