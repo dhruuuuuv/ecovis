@@ -55,6 +55,54 @@
         xAxis2 = d3.axisBottom(x2),
         yAxis = d3.axisLeft(y);
 
+        //construct the brush
+        var brush = d3.brushX()
+        .extent([[0, 0], [width, height2]])
+        .on("brush end", brushed);
+
+        //implement zoom
+        var zoom = d3.zoom()
+        .scaleExtent([1, Infinity])
+        .translateExtent([[0, 0], [width, height]])
+        .extent([[0, 0], [width, height]])
+        .on("zoom", zoomed);
+
+
+        //area under the graph to represent the consumption
+        var area = d3.area = d3.area()
+
+        //brush function
+        function brushed() {
+            //ignore brush-by-zoom
+            if (d3.sourceEvent && d3.event.sourceEvent.type === "zoom") return;
+
+            var s = d3.event.selection || x2.range();
+            x.domain(s.map(x2.invert, x2));
+
+            focus.select(".area").attr("d", area);
+            focus.select(".axis--x").call(xAxis);
+            svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+                .scale(width / (s[1] - s[0]))
+                .translate(-s[0], 0));
+        }
+
+        //zoom function
+        function zoomed() {
+            //ignore zoom-by-brush
+            if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return;
+
+            var t = d3.event.transform;
+            x.domain(t.rescaleX(x2).domain());
+            focus.select(".area").attr("d", area);
+            focus.select(".axis--x").call(xAxis);
+            context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+        }
+
+        //work out the type of the input
+        function type(d) {
+            d.date = parseDate(d.date);
+            d.wh = +d.wh;
+        }
 
 
         </script>
