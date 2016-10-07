@@ -70,6 +70,28 @@
 
         //area under the graph to represent the consumption
         var area = d3.area = d3.area()
+        .curve(d3.curveMonotoneX)
+        .x(function(d) {
+            return x(d.date);
+        })
+        .y0(height)
+        .y1(function(d) {
+            return y(d.wh);
+        });
+
+        //area under navgraph
+        var area2 = d3.area()
+        .curve(d3.curveMonotoneX)
+        .x(function(d) {
+            return x2(d.date);
+        })
+        .y0(height2);
+        .y1(function(d) {
+            return y2(d.wh);
+        });
+
+        //add d3 vis to the svg
+        
 
         //brush function
         function brushed() {
