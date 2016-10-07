@@ -17,8 +17,25 @@
 
         <script src="https://d3js.org/d3.v4.js"></script>
 
+        <title> eco-vis </title>
 
-        <title> d3 tutorial </title>
+        <!-- custom css stylings -->
+        <style>
+
+            .area {
+                fill: steelblue;
+                clip-path: url(#clip);
+            }
+
+            .zoom {
+                cursor: move;
+                fill: none;
+                pointer-events: all;
+            }
+
+        </style>
+
+
     </head>
 
     <body>
@@ -85,13 +102,98 @@
         .x(function(d) {
             return x2(d.date);
         })
-        .y0(height2);
+        .y0(height2)
         .y1(function(d) {
             return y2(d.wh);
         });
 
         //add d3 vis to the svg
-        
+        svg.append("defs").append("clipPath")
+        .attr("id", "clip")
+        .append("rect")
+        .attr("width", width)
+        .attr("height", height);
+
+        //define focus of graph vis
+        var focus = svg.append("g")
+        .attr("class", "focus")
+        .attr("transform", "translate("
+            + margin.left + ","
+            + margin.top  + ")"
+        );
+
+        //define focus of navgraph
+        var context = svg.append("g")
+        .attr("class", "context")
+        .attr("transform", "translate("
+            + margin2.left + ","
+            + margin2.top  + ")"
+        );
+
+        //import file
+        d3.csv("sample.csv", type, function(error, data) {
+            if (error) throw error;
+
+            x.domain(d3.extent(data, function(d) {
+                return d.date;
+            }));
+
+            y.domain([0, d3.max(data, function(d) {
+                return d.wh;
+            })]);
+
+            x2.domain(x.domain());
+
+            y2.domain(y.domain());
+
+            //add to the core graph
+
+            focus.append("path")
+            .datum(data)
+            .attr("class", "area")
+            .attr("d", area);
+
+            focus.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0,"
+                + height + ")"
+            )
+            .call(xAxis);
+
+            focus.append("g")
+            .attr("class", "axis axis--y")
+            .call(yAxis);
+
+            //add to the navgraph
+
+            context.append("path")
+            .datum(data)
+            .attr("class", "area")
+            .attr("d", area2);
+
+            context.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0,"
+                + height2 + ")"
+            )
+            .call(xAxis2);
+
+            context.append("g")
+            .attr("class", "brush")
+            .call(brush)
+            .call(brush.move, x.range());
+
+            //add everything
+            svg.append("rect")
+            .attr("class", "zoom")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("transform", "translate("
+                + margin.left + ","
+                + margin.top + ")"
+            )
+            .call(zoom);
+        })
 
         //brush function
         function brushed() {
