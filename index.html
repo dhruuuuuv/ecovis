@@ -1,256 +1,178 @@
-<!doctype html>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+<style>
 
-<html>
+.area {
+  fill: steelblue;
+  clip-path: url(#clip);
+}
 
-    <head>
+.zoom {
+  cursor: move;
+  fill: none;
+  pointer-events: all;
+}
 
-        <script src="https://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
+</style>
 
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-        <script src="https://d3js.org/d3.v4.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-        <title> eco-vis </title>
+<script src="https://d3js.org/d3.v4.js"></script>
 
-        <!-- custom css stylings -->
-        <style>
+<title> eco-vis </title>
 
-            .area {
-                fill: steelblue;
-                clip-path: url(#clip);
-            }
+</head>
 
-            .zoom {
-                cursor: move;
-                fill: none;
-                pointer-events: all;
-            }
-
-        </style>
+<body>
 
 
-    </head>
 
-    <body>
+    <div class="container">
 
-        <div class="container">
-            <h1> eco-visualisation </h1>
-        </div>
+        <h1> eco-visualisation </h1>
 
-        <div class="container">
-            <svg width="960" height="500"> </svg>
-        </div>
+        <br>
 
-        <script>
+        <svg width="960" height="500"></svg>
 
-        //select and add bounding to svg element
-        var svg = d3.select("svg"),
+    </div>
+
+    <script>
+    var svg = d3.select("svg"),
         margin = {top: 20, right: 20, bottom: 110, left: 40},
         margin2 = {top: 430, right: 20, bottom: 30, left: 40},
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         height2 = +svg.attr("height") - margin2.top - margin2.bottom;
 
-        //parse the input date format e.g. 28/07/2016 00:00
-        var parseDate = d3.timeParse("%d/%m/%Y %H:%M");
+    var parseDate = d3.timeParse("%d/%m/%Y %H:%M");
 
-        //define scales for axes
-        var x = d3.scaleTime().range([0, width]),
+    var x = d3.scaleTime().range([0, width]),
         x2 = d3.scaleTime().range([0, width]),
         y = d3.scaleLinear().range([height, 0]),
         y2 = d3.scaleLinear().range([height2, 0]);
 
-        //implement axes
-        var xAxis = d3.axisBottom(x),
+    var xAxis = d3.axisBottom(x),
         xAxis2 = d3.axisBottom(x2),
         yAxis = d3.axisLeft(y);
 
-        //construct the brush
-        var brush = d3.brushX()
+    var brush = d3.brushX()
         .extent([[0, 0], [width, height2]])
         .on("brush end", brushed);
 
-        //implement zoom
-        var zoom = d3.zoom()
+    var zoom = d3.zoom()
         .scaleExtent([1, Infinity])
         .translateExtent([[0, 0], [width, height]])
         .extent([[0, 0], [width, height]])
         .on("zoom", zoomed);
 
-
-        //area under the graph to represent the consumption
-        var area = d3.area()
+    var area = d3.area()
         .curve(d3.curveMonotoneX)
-        .x(function(d) {
-            return x(d.date);
-        })
+        .x(function(d) { return x(d.date); })
         .y0(height)
-        .y1(function(d) {
-            return y(d.wh);
-        });
+        .y1(function(d) { return y(d.wh); });
 
-        //area under navgraph
-        var area2 = d3.area()
+    var area2 = d3.area()
         .curve(d3.curveMonotoneX)
-        .x(function(d) {
-            return x2(d.date);
-        })
+        .x(function(d) { return x2(d.date); })
         .y0(height2)
-        .y1(function(d) {
-            return y2(d.wh);
-        });
+        .y1(function(d) { return y2(d.wh); });
 
-        //add d3 vis to the svg
-        svg.append("defs").append("clipPath")
+    svg.append("defs").append("clipPath")
         .attr("id", "clip")
-        .append("rect")
+      .append("rect")
         .attr("width", width)
         .attr("height", height);
 
-        //define focus of graph vis
-        var focus = svg.append("g")
+    var focus = svg.append("g")
         .attr("class", "focus")
-        .attr("transform", "translate("
-            + margin.left + ","
-            + margin.top  + ")"
-        );
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        //define focus of navgraph
-        var context = svg.append("g")
+    var context = svg.append("g")
         .attr("class", "context")
-        .attr("transform", "translate("
-            + margin2.left + ","
-            + margin2.top  + ")"
-        );
+        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-        //import file
-        d3.csv("sample6.csv", type, function(error, data) {
-            if (error) throw error;
+    d3.csv("sample5.csv", type, function(error, data) {
+      if (error) throw error;
 
-            data.forEach(function(d) {
-                console.log(d);
-            });
+      x.domain(d3.extent(data, function(d) { return d.date; }));
+      y.domain([0, d3.max(data, function(d) { return d.wh; })]);
+      x2.domain(x.domain());
+      y2.domain(y.domain());
 
-            console.log(1);
+      focus.append("path")
+          .datum(data)
+          .attr("class", "area")
+          .attr("d", area);
 
-            x.domain(d3.extent(data, function(d) {
-                console.log("entered");
-                console.log(d.date);
-                return d.date;
-            }));
+      focus.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
 
-            // console.log(
-            //     d3.extent(data, function(d) {
-            //         return d.date;
-            //     })
-            // );
+      focus.append("g")
+          .attr("class", "axis axis--y")
+          .call(yAxis);
 
-            y.domain([-1, d3.max(data, function(d) {
-                return d.wh;
-            })]);
+      context.append("path")
+          .datum(data)
+          .attr("class", "area")
+          .attr("d", area2);
 
-            x2.domain(x.domain());
+      context.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height2 + ")")
+          .call(xAxis2);
 
-            y2.domain(y.domain());
+      context.append("g")
+          .attr("class", "brush")
+          .call(brush)
+          .call(brush.move, x.range());
 
-            // console.log(x.domain());
-            // console.log(y.domain());
-            // console.log(data);
+      svg.append("rect")
+          .attr("class", "zoom")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+          .call(zoom);
+    });
 
-            //add to the core graph
+    function brushed() {
+      if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+      var s = d3.event.selection || x2.range();
+      x.domain(s.map(x2.invert, x2));
+      focus.select(".area").attr("d", area);
+      focus.select(".axis--x").call(xAxis);
+      svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+          .scale(width / (s[1] - s[0]))
+          .translate(-s[0], 0));
+    }
 
-            focus.append("path")
-            .datum(data)
-            .attr("class", "area")
-            .attr("d", area);
+    function zoomed() {
+      if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+      var t = d3.event.transform;
+      x.domain(t.rescaleX(x2).domain());
+      focus.select(".area").attr("d", area);
+      focus.select(".axis--x").call(xAxis);
+      context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+    }
 
-            focus.append("g")
-            .attr("class", "axis axis--x")
-            .attr("transform", "translate(0,"
-                + height + ")"
-            )
-            .call(xAxis);
+    function type(d) {
+      d.date = parseDate(d.date);
+      d.wh = +d.wh;
+      return d;
+    }
 
-            focus.append("g")
-            .attr("class", "axis axis--y")
-            .call(yAxis);
+    </script>
 
-            //add to the navgraph
-
-            context.append("path")
-            .datum(data)
-            .attr("class", "area")
-            .attr("d", area2);
-
-            context.append("g")
-            .attr("class", "axis axis--x")
-            .attr("transform", "translate(0,"
-                + height2 + ")"
-            )
-            .call(xAxis2);
-
-            context.append("g")
-            .attr("class", "brush")
-            .call(brush)
-            .call(brush.move, x.range());
-
-            //add everything
-            svg.append("rect")
-            .attr("class", "zoom")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("transform", "translate("
-                + margin.left + ","
-                + margin.top + ")"
-            )
-            .call(zoom);
-        })
-
-        //brush function
-        function brushed() {
-            //ignore brush-by-zoom
-            if (d3.sourceEvent && d3.event.sourceEvent.type === "zoom") return;
-
-            var s = d3.event.selection || x2.range();
-            x.domain(s.map(x2.invert, x2));
-
-            focus.select(".area").attr("d", area);
-            focus.select(".axis--x").call(xAxis);
-            svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
-                .scale(width / (s[1] - s[0]))
-                .translate(-s[0], 0));
-        }
-
-        //zoom function
-        function zoomed() {
-            //ignore zoom-by-brush
-            if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return;
-
-            var t = d3.event.transform;
-            x.domain(t.rescaleX(x2).domain());
-            focus.select(".area").attr("d", area);
-            focus.select(".axis--x").call(xAxis);
-            context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
-        }
-
-        //work out the type of the input
-        function type(d) {
-            d.date = parseDate(d.date);
-            // console.log(d.date.getTime());
-            d.wh = +d.wh;
-            // console.log(typeof(d.wh));
-        }
-
-
-        </script>
-
-    </body>
-
-<html>
+</body>
