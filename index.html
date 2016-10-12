@@ -4,7 +4,7 @@
 
     <head>
 
-        <script   src="https://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -86,7 +86,7 @@
 
 
         //area under the graph to represent the consumption
-        var area = d3.area = d3.area()
+        var area = d3.area()
         .curve(d3.curveMonotoneX)
         .x(function(d) {
             return x(d.date);
@@ -131,20 +131,38 @@
         );
 
         //import file
-        d3.csv("sample.csv", type, function(error, data) {
+        d3.csv("sample6.csv", type, function(error, data) {
             if (error) throw error;
 
+            data.forEach(function(d) {
+                console.log(d);
+            });
+
+            console.log(1);
+
             x.domain(d3.extent(data, function(d) {
+                console.log("entered");
+                console.log(d.date);
                 return d.date;
             }));
 
-            y.domain([0, d3.max(data, function(d) {
+            // console.log(
+            //     d3.extent(data, function(d) {
+            //         return d.date;
+            //     })
+            // );
+
+            y.domain([-1, d3.max(data, function(d) {
                 return d.wh;
             })]);
 
             x2.domain(x.domain());
 
             y2.domain(y.domain());
+
+            // console.log(x.domain());
+            // console.log(y.domain());
+            // console.log(data);
 
             //add to the core graph
 
@@ -225,7 +243,9 @@
         //work out the type of the input
         function type(d) {
             d.date = parseDate(d.date);
+            // console.log(d.date.getTime());
             d.wh = +d.wh;
+            // console.log(typeof(d.wh));
         }
 
 
