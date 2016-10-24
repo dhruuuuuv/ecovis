@@ -1,4 +1,4 @@
-<!DOCTYPE html xmlns:xlink="http://www.w3.org/1999/xlink">
+<!DOCTYPE html>
 <meta charset="utf-8">
 <head>
 <style>
@@ -418,21 +418,26 @@
           .attr('x', function (d) { return yearsTitleX[d]; })
           .attr('y', 40)
           .attr('text-anchor', 'middle')
-          attr("xlink:href", function(d){
-              switch (d.name) {
+          .text(function (d) { return d; })
+          .on("click", function(d) {
+              switch (d) {
                   case "Columbia":
-                    return "/COL";
+                    window.open("/COL","_self");
+                    break;
                   case "Cambodia":
-                    return "/KMB";
+                      window.open("/KMB","_self");
+                      break;
                   case "Mauritania":
-                    return "/MRT";
+                      window.open("/MRT","_self");
+                      break;
                   case "Niger":
-                    return "/NGR";
+                      window.open("/NRG","_self");
+                      break;
                   default:
-                    return "#";
+                    //   console.log(d);
+                      break;
               }
-          })
-          .text(function (d) { return d; });
+          });
       }
 
 
