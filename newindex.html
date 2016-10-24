@@ -45,13 +45,11 @@
 
         <br>
 
-        <div id="main" role="main">
-             <div id="view_selection" class="btn-group">
-               <a href="#" id="all" class="btn active">All Offices</a>
-               <a href="#" id="year" class="btn">Grants By Office</a>
-             </div>
-             <div id="vis"></div>
-       </div>
+        <div id="toolbar">
+          <a href="#" id="all" class="button active">All Offices</a>
+          <a href="#" id="year" class="button">Offices By Location</a>
+        </div>
+        <div id="vis"></div>
 
     </div>
 
@@ -150,7 +148,7 @@
      */
     function bubbleChart() {
       // Constants for sizing
-      var width = 940;
+      var width = 1050;
       var height = 600;
 
       // tooltip for mouseover functionality
@@ -310,7 +308,7 @@
           .attr('r', function (d) { return d.radius; });
 
         // Set initial layout to single group.
-        groupBubbles();
+        splitBubbles();
       };
 
       /*
@@ -386,7 +384,9 @@
        */
       function moveToYears(alpha) {
         return function (d) {
-          var target = yearCenters[d.location];
+            // console.log(d);
+          var target = yearCenters[d.name];
+        //   console.log(d.location);
           d.x = d.x + (target.x - d.x) * damper * alpha * 1.1;
           d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;
         };
@@ -429,7 +429,7 @@
         var content = '<span class="name">Title: </span><span class="value">' +
                       d.name +
                       '</span><br/>' +
-                      '<span class="name">Total Energy Usage (KWH): </span><span class="value">$' +
+                      '<span class="name">Total Energy Usage (KWH): </span><span class="value">' +
                       addCommas(d.value) +
                       '</span><br/>' +
                       '<span class="name">Floor: </span><span class="value">' +
