@@ -209,8 +209,8 @@
 
       // Nice looking colors - no reason to buck the trend
       var fillColor = d3.scale.ordinal()
-        .domain(['low', 'medium', 'high'])
-        .range(['#d84b2a', '#beccae', '#7aa25c']);
+        .domain(['Columbia', 'Cambodia', 'Mauritania', 'Niger'])
+        .range(['aqua', 'teal', 'blue', 'navy']);
 
       // Sizes bubbles based on their area instead of raw radius
       var radiusScale = d3.scale.pow()
@@ -295,8 +295,8 @@
         bubbles.enter().append('circle')
           .classed('bubble', true)
           .attr('r', 0)
-          .attr('fill', function (d) { return fillColor(d.group); })
-          .attr('stroke', function (d) { return d3.rgb(fillColor(d.group)).darker(); })
+          .attr('fill', function (d) { return fillColor(d.name); })
+          .attr('stroke', function (d) { return d3.rgb(fillColor(d.name)).darker(); })
           .attr('stroke-width', 2)
           .on('mouseover', showDetail)
           .on('mouseout', hideDetail);
