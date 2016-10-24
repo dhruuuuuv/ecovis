@@ -41,7 +41,7 @@
 
         <h1> eco-visualisation </h1>
 
-        <h2> homepage </h2>
+        <h2> Cambodia Overall View </h2>
 
         <br>
 
@@ -82,13 +82,13 @@
         .curve(d3.curveMonotoneX)
         .x(function(d) { return x(d.epoch_date); })
         .y0(height)
-        .y1(function(d) { return y(d.sum_COL); });
+        .y1(function(d) { return y(d.sum_KHM); });
 
     var area2 = d3.area()
         .curve(d3.curveMonotoneX)
         .x(function(d) { return x2(d.epoch_date); })
         .y0(height2)
-        .y1(function(d) { return y2(d.sum_COL); });
+        .y1(function(d) { return y2(d.sum_KHM); });
 
     svg.append("defs").append("clipPath")
         .attr("id", "clip")
@@ -104,11 +104,11 @@
         .attr("class", "context")
         .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-    d3.csv("condensed.csv", type, function(error, data) {
+    d3.csv("/condensed.csv", type, function(error, data) {
       if (error) throw error;
 
       x.domain(d3.extent(data, function(d) { return d.epoch_date; }));
-      y.domain([0, d3.max(data, function(d) { return d.sum_COL; })]);
+      y.domain([0, d3.max(data, function(d) { return d.sum_KHM; })]);
       x2.domain(x.domain());
       y2.domain(y.domain());
 
@@ -172,7 +172,7 @@
     function type(d) {
     //   d.date = parseDate(d.date);
       d.epoch_date = new Date(d.epoch_date * 1000);
-      d.sum_COL = +d.sum_COL;
+      d.sum_KHM = +d.sum_KHM;
       return d;
     }
 

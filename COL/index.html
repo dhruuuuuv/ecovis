@@ -41,7 +41,7 @@
 
         <h1> eco-visualisation </h1>
 
-        <h2> homepage </h2>
+        <h2> Columbia Overall View </h2>
 
         <br>
 
@@ -104,7 +104,7 @@
         .attr("class", "context")
         .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-    d3.csv("condensed.csv", type, function(error, data) {
+    d3.csv("/condensed.csv", type, function(error, data) {
       if (error) throw error;
 
       x.domain(d3.extent(data, function(d) { return d.epoch_date; }));
