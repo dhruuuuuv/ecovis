@@ -18,6 +18,8 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
 
+<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -26,6 +28,8 @@
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="/bubble_chart.css">
+
+<link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Shade" rel="stylesheet">
 
 
 <!-- Latest compiled and minified JavaScript -->
@@ -43,7 +47,7 @@
 
     <div class="container">
 
-        <h1> eco-visualisation </h1>
+        <a href="/"> <h1 class="maintitle"> <i class="em em-earth_africa"></i> eco-visualisation </h1> </a>
 
         <h2> homepage </h2>
 
@@ -51,13 +55,19 @@
 
         <div id="toolbar">
           <a href="#" id="all" class="button active">All Offices</a>
-          <a href="#" id="year" class="button">Offices By Location</a>
+          <a href="#" id="loc" class="button">Offices By Location</a>
         </div>
+
+        <br> <br> <br>
+
         <div id="vis"></div>
 
     </div>
 
     <script>
+
+        var legendRectSize = 18;
+        var legendSpacing = 4;
 
     //tooltip code
 
@@ -162,15 +172,15 @@
       // on which view mode is selected.
       var center = { x: width / 2, y: height / 2 };
 
-      var yearCenters = {
+      var locCenters = {
         "Columbia" : { x: width / 5, y: height / 2 },
         "Cambodia": { x: 2 * width / 5, y: height / 2 },
         "Mauritania": { x: 3 * width / 5, y: height / 2 },
         "Niger": { x: 4 * width / 5, y: height / 2 }
       };
 
-      // X locations of the year titles.
-      var yearsTitleX = {
+      // X locations of the loc titles.
+      var locsTitleX = {
         "Columbia" : (width / 5) - 90,
         "Cambodia" : (2 * width / 5) - 50,
         "Mauritania" : 3 * width / 5 + 20,
@@ -246,7 +256,7 @@
             floor: d.floor,
             // org: d.organization,
             // group: d.group,
-            // year: d.start_year,
+            // loc: d.start_loc,
             x: Math.random() * 900,
             y: Math.random() * 800
           };
@@ -317,12 +327,13 @@
 
       /*
        * Sets visualization in "single group mode".
-       * The year labels are hidden and the force layout
+       * The loc labels are hidden and the force layout
        * tick function is set to move all nodes to the
        * center of the visualization.
        */
       function groupBubbles() {
-        hideYears();
+        hideLocs();
+        showLegend();
 
         force.on('tick', function (e) {
           bubbles.each(moveToCenter(e.alpha))
@@ -355,16 +366,17 @@
       }
 
       /*
-       * Sets visualization in "split by year mode".
-       * The year labels are shown and the force layout
+       * Sets visualization in "split by loc mode".
+       * The loc labels are shown and the force layout
        * tick function is set to move nodes to the
-       * yearCenter of their data's year.
+       * locCenter of their data's loc.
        */
       function splitBubbles() {
-        showYears();
+        hideLegend();
+        showLocs();
 
         force.on('tick', function (e) {
-          bubbles.each(moveToYears(e.alpha))
+          bubbles.each(moveToLocs(e.alpha))
             .attr('cx', function (d) { return d.x; })
             .attr('cy', function (d) { return d.y; });
         });
@@ -373,10 +385,10 @@
       }
 
       /*
-       * Helper function for "split by year mode".
+       * Helper function for "split by loc mode".
        * Returns a function that takes the data for a
        * single node and adjusts the position values
-       * of that node to move it the year center for that
+       * of that node to move it the loc center for that
        * node.
        *
        * Positioning is adjusted by the force layout's
@@ -386,10 +398,10 @@
        * its destination, and so allows other forces like the
        * node's charge force to also impact final location.
        */
-      function moveToYears(alpha) {
+      function moveToLocs(alpha) {
         return function (d) {
             // console.log(d);
-          var target = yearCenters[d.name];
+          var target = locCenters[d.name];
         //   console.log(d.location);
           d.x = d.x + (target.x - d.x) * damper * alpha * 1.1;
           d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;
@@ -397,35 +409,43 @@
       }
 
       /*
-       * Hides Year title displays.
+       * Hides Loc title displays.
        */
-      function hideYears() {
-        svg.selectAll('.year').remove();
+      function hideLocs() {
+        svg.selectAll('.loc').remove();
+      }
+
+      function hideLegend() {
+        svg.selectAll('.legend').remove();
       }
 
       /*
-       * Shows Year title displays.
+       * Shows Loc title displays.
        */
-      function showYears() {
+      function showLocs() {
         // Another way to do this would be to create
-        // the year texts once and then just hide them.
-        var yearsData = d3.keys(yearsTitleX);
-        var years = svg.selectAll('.year')
-          .data(yearsData);
+        // the loc texts once and then just hide them.
+        var locsData = d3.keys(locsTitleX);
+        var locs = svg.selectAll('.loc')
+          .data(locsData);
 
-        years.enter().append('text')
-          .attr('class', 'year')
-          .attr('x', function (d) { return yearsTitleX[d]; })
+        locs.enter().append('text')
+          .attr('class', 'loc')
+          .attr('x', function (d) { return locsTitleX[d]; })
           .attr('y', 40)
           .attr('text-anchor', 'middle')
           .text(function (d) { return d; })
+          .on("mouseover", function(d) {
+              d3.select(this)
+             .attr("fill", "red");
+          })
           .on("click", function(d) {
               switch (d) {
                   case "Columbia":
                     window.open("/COL","_self");
                     break;
                   case "Cambodia":
-                      window.open("/KMB","_self");
+                      window.open("/KHM","_self");
                       break;
                   case "Mauritania":
                       window.open("/MRT","_self");
@@ -434,10 +454,43 @@
                       window.open("/NER","_self");
                       break;
                   default:
-                    //   console.log(d);
                       break;
               }
           });
+      }
+      /*
+       * Shows Loc title displays.
+       */
+      function showLegend() {
+
+        var legend = svg.selectAll('.legend')
+          .data(fillColor.domain())
+          .enter()
+          .append('g')
+          .attr('class', 'legend')
+          .attr('transform', function(d, i) {
+            var heightleg = legendRectSize + legendSpacing;
+            var offset =  heightleg * fillColor.domain().length / 2;
+            var horz = -2 * legendRectSize;
+            var vert = i * heightleg - offset;
+            return 'translate(' + (horz + 100) + ',' + (vert + 100) + ')';
+          });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', function(d) {
+                return fillColor(d);
+            })
+            .style('stroke', function(d) {
+                return fillColor(d);
+            });
+
+        legend.append('text')
+          .attr('x', legendRectSize + legendSpacing)
+          .attr('y', legendRectSize - legendSpacing)
+          .text(function(d) { return d; });
+
       }
 
 
@@ -475,12 +528,12 @@
       /*
        * Externally accessible function (this is attached to the
        * returned chart function). Allows the visualization to toggle
-       * between "single group" and "split by year" modes.
+       * between "single group" and "split by loc" modes.
        *
-       * displayName is expected to be a string and either 'year' or 'all'.
+       * displayName is expected to be a string and either 'loc' or 'all'.
        */
       chart.toggleDisplay = function (displayName) {
-        if (displayName === 'year') {
+        if (displayName === 'loc') {
           splitBubbles();
         } else {
           groupBubbles();
