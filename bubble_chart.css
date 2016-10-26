@@ -72,4 +72,9 @@ a:hover {
 .tooltip .et {
   font-size: 18px;
   font-weight:bold;
+  color: darkgreen;
+}
+
+.tooltip .ev {
+  color: darkgreen;
 }
