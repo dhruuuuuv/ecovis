@@ -35,7 +35,7 @@ rect {
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-<link rel="stylesheet" href="/bubble_chart.css">
+<link rel="stylesheet" href="../bubble_chart.css">
 
 <link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Shade" rel="stylesheet">
 
@@ -120,7 +120,7 @@ rect {
         .attr("class", "context")
         .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-    d3.csv("/condensed.csv", type, function(error, data) {
+    d3.csv("/ecovis/condensed.csv", type, function(error, data) {
       if (error) throw error;
 
       x.domain(d3.extent(data, function(d) { return d.epoch_date; }));

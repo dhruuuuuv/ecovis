@@ -30,7 +30,7 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<link rel="stylesheet" href="/bubble_chart.css">
+<link rel="stylesheet" href="../bubble_chart.css">
 
 <link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Shade" rel="stylesheet">
 
@@ -112,7 +112,7 @@
         .attr("class", "context")
         .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-    d3.csv("/condensed.csv", type, function(error, data) {
+    d3.csv("/ecovis/condensed.csv", type, function(error, data) {
       if (error) throw error;
 
       x.domain(d3.extent(data, function(d) { return d.epoch_date; }));
