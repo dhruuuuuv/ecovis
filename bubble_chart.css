@@ -36,13 +36,13 @@ a:hover {
 .loc {
   font-family: 'Bungee', cursive;
   font-size: 21px;
-  fill: black;
+  /*fill: black;*/
   cursor: default;
   padding-top: 40px;
 }
 
 .loc:hover {
-    fill: navy;
+    /*fill: navy;*/
 }
 
 .tooltip {
