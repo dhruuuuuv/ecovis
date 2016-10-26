@@ -19,7 +19,7 @@ a:hover {
 
 .maintitle {
     font-family: 'Bungee Shade';
-    cursive; color: black;
+    color: black;
 }
 
 .maintitle:hover {
@@ -36,9 +36,13 @@ a:hover {
 .loc {
   font-family: 'Bungee', cursive;
   font-size: 21px;
-  fill: #000;
+  fill: black;
   cursor: default;
   padding-top: 40px;
+}
+
+.loc:hover {
+    fill: navy;
 }
 
 .tooltip {
