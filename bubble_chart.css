@@ -68,3 +68,8 @@ a:hover {
 .tooltip .name {
   font-weight:bold;
 }
+
+.tooltip .et {
+  font-size: 20px
+  font-weight:bold;
+}
